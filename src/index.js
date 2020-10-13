@@ -27,6 +27,21 @@ app.post('/new-user', async (req, res) => {
     }
 })
 
+app.get('/user/:id', async (req, res) => {
+    const _id = req.params.id
+
+    try {
+        const user = await User.findById(_id)
+        if (!user) {
+            return res.status(400).send("No user with this Id!")
+        }
+
+        res.status(200).send(user)
+    } catch (error) {
+        res.status(400).send(error)
+    }
+})
+
 app.post('/new-task', async (req, res) => {
     const task = new Task(req.body)
 
