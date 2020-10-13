@@ -49,7 +49,7 @@ app.patch('/user/update/:id', async (req, res) => {
             return allowedFields.includes(field)
         })
 
-        if(!isValidUpdate) {
+        if (!isValidUpdate) {
             return res.status(400).send("You are trying to update an invalid field!")
         }
 
@@ -72,13 +72,27 @@ app.patch('/user/update/:id', async (req, res) => {
     }
 })
 
+app.delete('/user/delete/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id)
+
+        if (!user) {
+            return res.status(400).send(user)
+        }
+
+        res.status(200).send(user)
+    } catch (error) {
+        res.status(400).send(error)
+    }
+})
+
 app.post('/task/create', async (req, res) => {
     const allowedFields = ["title", "description", "finishDate"]
     const isValidUpdate = Object.keys(req.body).every((field) => {
         return allowedFields.includes(field)
     })
 
-    if(!isValidUpdate) {
+    if (!isValidUpdate) {
         return res.status(400).send("You are trying to update an invalid field!")
     }
 
@@ -136,6 +150,20 @@ app.get('/task/find/:id', async (req, res) => {
         res.status(400).send(task)
     } catch (error) {
         res.status(500).send(error)
+    }
+})
+
+app.delete('/task/delete/:id', async (req, res) => {
+    try {
+        const task = await Task.findByIdAndDelete(req.params.id)
+
+        if (!task) {
+            return res.status(400).send(task)
+        }
+
+        res.status(200).send(task)
+    } catch (error) {
+        res.status(400).send(error)
     }
 })
 
