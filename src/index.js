@@ -7,7 +7,7 @@ const port = 3000
 
 app.use(express.json())
 
-app.post('/new-user', async (req, res) => {
+app.post('/user/create', async (req, res) => {
     const user = new User(req.body)
 
     try {
@@ -18,7 +18,7 @@ app.post('/new-user', async (req, res) => {
     }
 })
 
-app.get('/users', async (req, res) => {
+app.get('/user/list', async (req, res) => {
     try {
         const users = await User.find()
         res.status(200).send(users)
@@ -27,7 +27,7 @@ app.get('/users', async (req, res) => {
     }
 })
 
-app.get('/user/:id', async (req, res) => {
+app.get('/user/find/:id', async (req, res) => {
     const _id = req.params.id
 
     try {
@@ -42,7 +42,7 @@ app.get('/user/:id', async (req, res) => {
     }
 })
 
-app.patch('/update-user/:id', async (req, res) => {
+app.patch('/user/update/:id', async (req, res) => {
     try {
         const user = await User.findOneAndUpdate(
             { _id: req.params.id },
@@ -63,7 +63,7 @@ app.patch('/update-user/:id', async (req, res) => {
     }
 })
 
-app.post('/new-task', async (req, res) => {
+app.post('/task/create', async (req, res) => {
     const task = new Task(req.body)
 
     try {
@@ -74,7 +74,7 @@ app.post('/new-task', async (req, res) => {
     }
 })
 
-app.get('/tasks', async (req, res) => {
+app.get('/task/list', async (req, res) => {
     try {
         const tasks = await Task.find()
         res.status(200).send(tasks)
@@ -83,7 +83,7 @@ app.get('/tasks', async (req, res) => {
     }
 })
 
-app.get('/update-task/:id', async (req, res) => {
+app.get('/task/update/:id', async (req, res) => {
     try {
         const _id = req.params.id
 
@@ -106,7 +106,7 @@ app.get('/update-task/:id', async (req, res) => {
     }
 })
 
-app.get('/task/:id', async (req, res) => {
+app.get('/task/find/:id', async (req, res) => {
     const _id = req.params.id
 
     try {
