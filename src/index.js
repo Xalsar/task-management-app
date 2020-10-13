@@ -7,8 +7,13 @@ const port = 3000
 
 app.use(express.json())
 
-app.post('/users', (req, res) => {
-    res.send('Testing perfect!')
+app.get('/users', async (req, res) => {
+    try {
+        const users = await User.find()
+        res.status(200).send(users)
+    } catch (error) {
+        res.status(500).send(error)
+    }
 })
 
 app.post('/new-user', async (req, res) => {
