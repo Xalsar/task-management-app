@@ -74,6 +74,55 @@ app.post('/new-task', async (req, res) => {
     }
 })
 
+app.get('/tasks', async (req, res) => {
+    try {
+        const tasks = await Task.find()
+        res.status(200).send(tasks)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
+
+app.get('/update-task/:id', async (req, res) => {
+    try {
+        const _id = req.params.id
+
+        const task = await Task.findOneAndUpdate(
+            { _id },
+            { $set: req.body },
+            {
+                new: true,
+                runValidators: true
+            }
+        )
+
+        if (!task) {
+            return res.status(500).send()
+        }
+
+        res.status(400).send(task)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
+
+app.get('/task/:id', async (req, res) => {
+    const _id = req.params.id
+
+    try {
+        const task = await Task.findById(_id)
+        if (!task) {
+            return res.status(500).send()
+        }
+
+        res.status(400).send(task)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
+
+
+
 app.listen(port, () => {
     console.log(`Server up on port ${port}!`)
 })
