@@ -10,7 +10,7 @@ router.post('/user/create', async (req, res) => {
         await user.save()
         res.status(201).send(user)
     } catch (error) {
-        res.status(400).send(error)
+        res.status(500).send(error)
     }
 })
 
@@ -29,12 +29,12 @@ router.get('/user/find/:id', async (req, res) => {
     try {
         const user = await User.findById(_id)
         if (!user) {
-            return res.status(400).send("No user with this Id!")
+            return res.status(500).send("No user with this Id!")
         }
 
         res.status(200).send(user)
     } catch (error) {
-        res.status(400).send(error)
+        res.status(500).send(error)
     }
 })
 
@@ -46,7 +46,7 @@ router.patch('/user/update/:id', async (req, res) => {
         })
 
         if (!isValidUpdate) {
-            return res.status(400).send("You are trying to update an invalid field!")
+            return res.status(500).send("You are trying to update an invalid field!")
         }
 
         const user = await User.findOneAndUpdate(
@@ -59,12 +59,12 @@ router.patch('/user/update/:id', async (req, res) => {
         )
 
         if (!user) {
-            res.status(400).send()
+            res.status(500).send()
         }
 
         res.status(200).send(user)
     } catch (error) {
-        res.status(400).send(error)
+        res.status(500).send(error)
     }
 })
 
@@ -73,12 +73,12 @@ router.delete('/user/delete/:id', async (req, res) => {
         const user = await User.findByIdAndDelete(req.params.id)
 
         if (!user) {
-            return res.status(400).send(user)
+            return res.status(500).send(user)
         }
 
         res.status(200).send(user)
     } catch (error) {
-        res.status(400).send(error)
+        res.status(500).send(error)
     }
 })
 

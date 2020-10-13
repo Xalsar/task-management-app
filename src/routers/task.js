@@ -10,7 +10,7 @@ router.post('/task/create', async (req, res) => {
     })
 
     if (!isValidUpdate) {
-        return res.status(400).send("You are trying to update an invalid field!")
+        return res.status(500).send("You are trying to update an invalid field!")
     }
 
     const task = new Task(req.body)
@@ -19,7 +19,7 @@ router.post('/task/create', async (req, res) => {
         await task.save()
         res.status(201).send(task)
     } catch (error) {
-        res.status(400).send(error)
+        res.status(500).send(error)
     }
 })
 
@@ -49,7 +49,7 @@ router.get('/task/update/:id', async (req, res) => {
             return res.status(500).send()
         }
 
-        res.status(400).send(task)
+        res.status(500).send(task)
     } catch (error) {
         res.status(500).send(error)
     }
@@ -64,7 +64,7 @@ router.get('/task/find/:id', async (req, res) => {
             return res.status(500).send()
         }
 
-        res.status(400).send(task)
+        res.status(500).send(task)
     } catch (error) {
         res.status(500).send(error)
     }
@@ -75,12 +75,12 @@ router.delete('/task/delete/:id', async (req, res) => {
         const task = await Task.findByIdAndDelete(req.params.id)
 
         if (!task) {
-            return res.status(400).send(task)
+            return res.status(500).send(task)
         }
 
         res.status(200).send(task)
     } catch (error) {
-        res.status(400).send(error)
+        res.status(500).send(error)
     }
 })
 
