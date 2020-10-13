@@ -44,6 +44,15 @@ app.get('/user/find/:id', async (req, res) => {
 
 app.patch('/user/update/:id', async (req, res) => {
     try {
+        const allowedFields = ["email", "name", "age"]
+        const isValidUpdate = Object.keys(req.body).every((field) => {
+            return allowedFields.includes(field)
+        })
+
+        if(!isValidUpdate) {
+            return res.status(400).send("You are trying to update an invalid field!")
+        }
+
         const user = await User.findOneAndUpdate(
             { _id: req.params.id },
             { $set: req.body },
@@ -64,6 +73,15 @@ app.patch('/user/update/:id', async (req, res) => {
 })
 
 app.post('/task/create', async (req, res) => {
+    const allowedFields = ["title", "description", "finishDate"]
+    const isValidUpdate = Object.keys(req.body).every((field) => {
+        return allowedFields.includes(field)
+    })
+
+    if(!isValidUpdate) {
+        return res.status(400).send("You are trying to update an invalid field!")
+    }
+
     const task = new Task(req.body)
 
     try {
