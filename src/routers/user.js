@@ -16,14 +16,14 @@ router.post('/user/create', async (req, res) => {
     }
 })
 
-router.get('/user/list', async (req, res) => {
-    try {
-        const users = await User.find()
-        res.status(200).send(users)
-    } catch (error) {
-        res.status(500).send(error)
-    }
-})
+// router.get('/user/list', async (req, res) => {
+//     try {
+//         const users = await User.find()
+//         res.status(200).send(users)
+//     } catch (error) {
+//         res.status(500).send(error)
+//     }
+// })
 
 router.get('/user/me', auth, async (req, res) => {
     const user = req.user
@@ -50,10 +50,12 @@ router.get('/user/find/:id', async (req, res) => {
     }
 })
 
-router.patch('/user/update/:id', async (req, res) => {
+router.patch('/user/update', auth, async (req, res) => {
     try {
+        const user = req.user
+        const updates = Object.keys(req.body)
         const allowedFields = ["email", "name", "age"]
-        const isValidUpdate = Object.keys(req.body).every((field) => {
+        const isValidUpdate = updates.every((field) => {
             return allowedFields.includes(field)
         })
 
@@ -61,18 +63,12 @@ router.patch('/user/update/:id', async (req, res) => {
             return res.status(500).send("You are trying to update an invalid field!")
         }
 
-        const user = await User.findOneAndUpdate(
-            { _id: req.params.id },
-            { $set: req.body },
-            {
-                new: true,
-                runValidators: true
-            }
-        )
-
         if (!user) {
-            res.status(500).send()
+            return res.status(500).send()
         }
+
+        updates.forEach((update) => user[update] = req.body[update])
+        await user.save()
 
         res.status(200).send(user)
     } catch (error) {
@@ -80,13 +76,10 @@ router.patch('/user/update/:id', async (req, res) => {
     }
 })
 
-router.delete('/user/delete/:id', async (req, res) => {
+router.delete('/user/delete/:id', auth, async (req, res) => {
     try {
-        const user = await User.findByIdAndDelete(req.params.id)
-
-        if (!user) {
-            return res.status(500).send(user)
-        }
+        const user = req.user
+        await user.remove()
 
         res.status(200).send(user)
     } catch (error) {
