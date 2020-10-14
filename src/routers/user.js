@@ -97,8 +97,8 @@ router.delete('/user/delete/:id', async (req, res) => {
 router.post('/user/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
-        await user.generateAuthToken()
-        res.status(200).send(user)
+        const token = await user.generateAuthToken()
+        res.status(200).send({ user, token })
     } catch (error) {
         res.status(400).send(error)
     }
