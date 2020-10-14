@@ -87,6 +87,18 @@ userSchema.methods.generateAuthToken = async function () {
     return token
 }
 
+userSchema.methods.toJSON = function () {
+    const user = this
+    const userObject = user.toObject()
+
+    return {
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        age: user.age
+    }
+}
+
 const User = mongoose.model('User', userSchema)
 
 module.exports = User
