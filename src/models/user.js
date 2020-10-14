@@ -100,6 +100,12 @@ userSchema.methods.toJSON = function () {
     }
 }
 
+userSchema.virtual('tasks', {
+    ref: 'Task',
+    localField: '_id',
+    foreignField: 'owner'
+})
+
 userSchema.pre("remove", async function(next) {
     const user = this
     await Task.deleteMany({owner: user._id})
