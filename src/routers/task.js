@@ -29,9 +29,11 @@ router.post('/task/create', auth, async (req, res) => {
 
 router.get('/task/list', auth, async (req, res) => {
     try {
-        const tasks = await Task.find({ owner: req.user._id })
-        res.status(200).send(tasks)
+        // const tasks = await Task.find({ owner: req.user._id })
+        await req.user.populate('tasks').execPopulate()
+        res.status(200).send(req.user.tasks)
     } catch (error) {
+        console.log(error)
         res.status(500).send(error)
     }
 })
